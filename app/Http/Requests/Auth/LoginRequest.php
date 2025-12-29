@@ -53,6 +53,26 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Handle successful authentication
+     */
+    public function authenticated(): void
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+        
+        // Store intended URL for shoppers
+        $intended = session()->pull('url.intended', route('home'));
+        
+        // Redirect based on role
+        if ($user->role === 'admin') {
+            redirect()->setIntendedUrl(route('dashboard'));
+        } else {
+            // For shoppers, keep their intended destination
+            redirect()->setIntendedUrl($intended);
+        }
+    }
+
+    /**
      * Ensure the login request is not rate limited.
      *
      * @throws \Illuminate\Validation\ValidationException
