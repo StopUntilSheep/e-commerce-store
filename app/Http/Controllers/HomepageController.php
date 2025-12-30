@@ -13,7 +13,9 @@ class HomepageController extends Controller
     public function index(Request $request)
     {
         // Get featured products
-        $featuredProducts = Product::with(['category', 'brand', 'images'])
+        $featuredProducts = Product::with(['category', 'brand', 'images' => function ($query) {
+                $query->whereNull('deleted_at'); // Exclude soft-deleted images
+            }])
             ->where('is_active', true)
             ->where('is_featured', true)
             ->where('quantity', '>', 0)
@@ -31,7 +33,8 @@ class HomepageController extends Controller
                     'is_in_stock' => $product->quantity > 0,
                     'category' => $product->category?->name,
                     'brand' => $product->brand?->name,
-                    'main_image' => $product->images->first()?->url ?? '/images/placeholder.jpg',
+                    'main_image' => $product->images->first()?->url,
+                    'main_image_alt_text' => $product->images->first()?->alt_text,
                     'average_rating' => $product->reviews()->avg('rating') ?? 0,
                 ];
             });
@@ -68,7 +71,7 @@ class HomepageController extends Controller
             ->take(6)
             ->get();
 
-        return Inertia::render('Welcome', [
+        return Inertia::render('Homepage', [
             'featuredProducts' => $featuredProducts,
             'newArrivals' => $newArrivals,
             'categories' => $categories,
