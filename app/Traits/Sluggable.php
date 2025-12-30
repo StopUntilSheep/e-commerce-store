@@ -6,8 +6,8 @@ use Illuminate\Support\Str;
 
 trait Sluggable
 {
-    private const DEFAULT_FIELD_SLUG = 'slug';
-    private const DEFAULT_FIELD_NAME = 'name';
+    private const string DEFAULT_FIELD_SLUG = 'slug';
+    private const string DEFAULT_FIELD_NAME = 'name';
 
     /**
      * Boot the sluggable trait for a model.
@@ -28,8 +28,8 @@ trait Sluggable
      */
     protected function generateSlug(): void
     {
-        $slugField = $this->slugField ?? $this->DEFAULT_FIELD_SLUG;
-        $sourceField = $this->slugSourceField ?? $this->DEFAULT_FIELD_NAME;
+        $slugField = $this->slugField ?? self::DEFAULT_FIELD_SLUG;
+        $sourceField = $this->slugSourceField ?? self::DEFAULT_FIELD_NAME;
         
         if (empty($this->{$slugField})) {
             $this->{$slugField} = $this->generateUniqueSlug(
@@ -43,8 +43,8 @@ trait Sluggable
      */
     protected function generateSlugOnUpdate(): void
     {
-        $slugField = $this->slugField ?? $this->DEFAULT_FIELD_SLUG;
-        $sourceField = $this->slugSourceField ?? $this->DEFAULT_FIELD_NAME;
+        $slugField = $this->slugField ?? self::DEFAULT_FIELD_SLUG;
+        $sourceField = $this->slugSourceField ?? self::DEFAULT_FIELD_NAME;
         
         // Only regenerate slug if name changed and slug is empty
         if ($this->isDirty($sourceField) && empty($this->{$slugField})) {
@@ -67,7 +67,7 @@ trait Sluggable
     protected function generateUniqueSlug(string $slug): string
     {
         $originalSlug = $slug;
-        $slugField = $this->slugField ?? $this->DEFAULT_FIELD_SLUG;
+        $slugField = $this->slugField ?? self::DEFAULT_FIELD_SLUG;
         $count = 1;
 
         // Check if slug exists, if yes append a number
@@ -98,6 +98,6 @@ trait Sluggable
      */
     public function getRouteKeyName(): string
     {
-        return $this->slugField ?? $this->DEFAULT_FIELD_SLUG;
+        return $this->slugField ?? self::DEFAULT_FIELD_SLUG;
     }
 }
