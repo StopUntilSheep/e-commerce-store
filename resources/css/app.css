@@ -1,3 +1,5 @@
+@import 'resources/css/scss/reviews.scss';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

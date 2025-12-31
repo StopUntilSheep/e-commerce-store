@@ -3,31 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
-    public function show(Product $product) // Laravel automatically finds by slug
+    public function show(Product $product)
     {
         // Check if product is active
         if (!$product->is_active) {
             abort(404); // Or redirect
         }
-        
+
         // Eager load relationships
         $product->load(['category', 'brand', 'images' => function ($query) {
             $query->whereNull('deleted_at')->orderBy('order');
         }]);
-        
+
         // Also load reviews with users
         $product->load(['reviews' => function ($query) {
             $query->where('is_approved', true)
-                  ->with('user:id,name')
-                  ->latest()
-                  ->take(10);
+                ->with('user:id,name')
+                ->latest()
+                ->take(10);
         }]);
-        
+
         // Format data
         $productData = [
             'id' => $product->id,
@@ -86,11 +84,11 @@ class ProductController extends Controller
             'attributes' => $product->attributes,
             'created_at' => $product->created_at->format('F Y'),
         ];
-        
+
         // Get related products
         $relatedProducts = Product::with(['images' => function ($query) {
-                $query->whereNull('deleted_at')->orderBy('order');
-            }])
+            $query->whereNull('deleted_at')->orderBy('order');
+        }])
             ->where('is_active', true)
             ->where('quantity', '>', 0)
             ->where('id', '!=', $product->id)
@@ -116,10 +114,10 @@ class ProductController extends Controller
                     'main_image' => $related->images->first()?->url,
                 ];
             });
-        
-        return Inertia::render('Product', [
+
+        return $this->renderWithLayoutData('Product', [
             'product' => $productData,
             'relatedProducts' => $relatedProducts,
-        ]);
+        ], []);
     }
 }

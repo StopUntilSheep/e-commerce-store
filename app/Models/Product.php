@@ -106,6 +106,16 @@ class Product extends Model
         return $this->reviews()->avg('rating') ?? 0;
     }
 
+    public function getHasVariantsAttribute(): bool
+    {
+        // Check if variants relationship is loaded
+        if (array_key_exists('variants', $this->relations)) {
+            return $this->variants->isNotEmpty();
+        }
+        
+        return $this->variants()->exists();
+    }
+
     // Business Logic
     public function reduceStock(int $quantity): bool
     {

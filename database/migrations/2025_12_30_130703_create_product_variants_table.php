@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('sku')->unique()->nullable();
             $table->string('name');
             $table->json('attributes')->nullable(); // JSON: {'size': 'M', 'color': 'Red'}
+            $table->boolean('is_default');
             
             $table->timestamps();
             $table->softDeletes();

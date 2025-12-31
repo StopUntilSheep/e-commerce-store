@@ -1,0 +1,28 @@
+.product-rating {
+    li {
+        display: table;
+    }
+
+    .stars {
+        position: relative;
+        display:inline-block;
+        font-size: 30pt;
+        height: 1em;
+        line-height: 1em;
+    }
+
+    .stars:before {	
+        content: "\2605\2605\2605\2605\2605";
+        color: lightgrey;
+        z-index: -1;
+    }
+
+    .stars:after {	
+        content: "\2605\2605\2605\2605\2605";
+        position:absolute;
+        left:0;
+        overflow:hidden;
+        width:var(--w,50%);
+        color: rgb(255, 200, 0);
+    }
+}

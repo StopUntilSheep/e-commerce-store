@@ -45,6 +45,9 @@ class ProductVariantSeeder extends Seeder
                 
                 // Create unique SKU
                 $sku = "{$product->sku}-{$color}-{$size}";
+
+                // Is default variant?
+                $isDefault = $i === 1;
                 
                 ProductVariant::create([
                     'product_id' => $product->id,
@@ -54,6 +57,7 @@ class ProductVariantSeeder extends Seeder
                         'color' => $color,
                         'size' => $size,
                     ],
+                    'is_default' => $isDefault,
                 ]);
             }
         }
@@ -64,11 +68,14 @@ class ProductVariantSeeder extends Seeder
             $iphoneColors = ['Natural Titanium', 'Blue Titanium', 'White Titanium', 'Black Titanium'];
             $storageOptions = ['128GB', '256GB', '512GB', '1TB'];
             
-            foreach ($iphoneColors as $color) {
-                foreach ($storageOptions as $storage) {
+            foreach ($iphoneColors as $i => $color) {
+                foreach ($storageOptions as $j => $storage) {
                     // Create unique SKU for each combination
                     $colorSlug = Str::slug($color, '-');
                     $storageSlug = Str::slug($storage, '-');
+
+                    // Is default variant?
+                    $isDefault = $i === 0 && $j === 0;
                     
                     ProductVariant::create([
                         'product_id' => $iphone->id,
@@ -78,6 +85,7 @@ class ProductVariantSeeder extends Seeder
                             'color' => $color,
                             'storage' => $storage,
                         ],
+                        'is_default' => $isDefault,
                     ]);
                 }
             }
