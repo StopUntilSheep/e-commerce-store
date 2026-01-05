@@ -28,15 +28,10 @@ class CartSeeder extends Seeder
                         'user_id' => $user->id,
                         'session_id' => null, // User is logged in
                         'product_id' => $product->id,
-                        'variant_sku' => $product->variants->isNotEmpty() ? $product->variants->random()->sku : null,
+                        'product_variant_id' => $product->variants->isNotEmpty() ? $product->variants->random()->id : null,
                         'quantity' => $quantity,
-                        'price' => $product->price,
-                        'price_snapshot' => [
-                            'original' => $product->price,
-                            'updated_at' => now()->subDays(rand(0, 7)),
-                        ],
+                        'price_snapshot' => $product->price,
                         'expires_at' => now()->addDays(30),
-                        'attributes' => $product->attributes,
                     ]);
                 }
             }
@@ -51,14 +46,10 @@ class CartSeeder extends Seeder
                 'user_id' => null,
                 'session_id' => Str::random(32),
                 'product_id' => $product->id,
+                'product_variant_id' => $product->variants->isNotEmpty() ? $product->variants->random()->id : null,
                 'quantity' => $quantity,
-                'price' => $product->price,
-                'price_snapshot' => [
-                    'original' => $product->price,
-                    'updated_at' => now()->subDays(rand(0, 14)),
-                ],
+                'price_snapshot' => $product->price,
                 'expires_at' => now()->addDays(7), // Guest carts expire faster
-                'attributes' => $product->attributes,
             ]);
         }
     }

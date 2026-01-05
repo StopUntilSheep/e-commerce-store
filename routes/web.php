@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -8,6 +9,8 @@ use Inertia\Inertia;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+Route::post('/cart/add/{product:id}/{productVariant?}', [CartController::class, 'add'])
+    ->name('cart.add');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Admin/Dashboard');
@@ -19,4 +22,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

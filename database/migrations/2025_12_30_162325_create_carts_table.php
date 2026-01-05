@@ -26,15 +26,11 @@ return new class extends Migration
                   ->cascadeOnDelete();
             
             // Variant information
-            $table->string('variant_sku')->nullable(); // If product has variants
-            $table->json('attributes')->nullable(); // Selected variant attributes
+            $table->string('product_variant_id')->nullable(); // If product has variants
             
             // Cart item details
             $table->integer('quantity')->default(1);
-            $table->decimal('price', 10, 2)->nullable(); // Price at time of adding
-            
-            // Price snapshot (in case product price changes)
-            $table->json('price_snapshot')->nullable(); // {'original': 99.99, 'discounted': 79.99}
+            $table->decimal('price_snapshot', 10, 2)->nullable(); // Price at time of adding
             
             // Timestamps for cart expiration
             $table->timestamps();

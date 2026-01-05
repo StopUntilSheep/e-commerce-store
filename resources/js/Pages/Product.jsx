@@ -36,7 +36,7 @@ export default function Product({ auth, product }) {
                         <ul className="product-rating">
                             <li>
                                 <div
-                                    class="stars"
+                                    className="stars"
                                     style={{
                                         "--w": `${
                                             product.average_rating * 20
@@ -57,7 +57,7 @@ export default function Product({ auth, product }) {
                             <select name="variant" id="variant">
                                 {product.variants.map((variant) => {
                                     return (
-                                        <option value={variant.sku}>
+                                        <option value={variant.sku} key={variant.id}>
                                             {variant.name}
                                         </option>
                                     );

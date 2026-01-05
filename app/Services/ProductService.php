@@ -71,6 +71,14 @@ class ProductService
             'main_image' => $product->images->first()?->url,
             'main_image_alt_text' => $product->images->first()?->alt_text,
             'average_rating' => $product->reviews()->avg('rating') ?? 0,
+            'variants' => $product->variants->map(function ($variant) {
+                return [
+                    'id' => $variant->id,
+                    'sku' => $variant->sku,
+                    'name' => $variant->name,
+                    'attributes' => $variant->attributes,
+                ];
+            }),
         ];
 
         $defaultVariant = $product->has_variants

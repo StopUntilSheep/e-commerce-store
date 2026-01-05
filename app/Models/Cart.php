@@ -13,19 +13,15 @@ class Cart extends Model
         'user_id',
         'session_id',
         'product_id',
-        'variant_sku',
+        'product_variant_id',
         'quantity',
-        'attributes',
-        'price',
         'price_snapshot',
         'expires_at',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
-        'price' => 'decimal:2',
-        'attributes' => 'array',
-        'price_snapshot' => 'array',
+        'price_snapshot' => 'decimal:2',
         'expires_at' => 'datetime',
     ];
 
@@ -75,9 +71,9 @@ class Cart extends Model
         return '£' . number_format($this->subtotal, 2);
     }
 
-    public function getFormattedPriceAttribute(): string
+    public function getFormattedPriceSnapshotAttribute(): string
     {
-        return '£' . number_format($this->price, 2);
+        return '£' . number_format($this->price_snapshot, 2);
     }
 
     public function getIsGuestAttribute(): bool
@@ -87,13 +83,13 @@ class Cart extends Model
 
     public function getVariantNameAttribute(): ?string
     {
-        if (!$this->attributes || !$this->variant_sku) {
+        if (!$this->variant_sku) {
             return null;
         }
 
         // Convert attributes array to readable string
         // {'size': 'M', 'color': 'Red'} → "Size: M, Color: Red"
-        return collect($this->attributes)
+        return collect($this->product->attributes)
             ->map(fn($value, $key) => ucfirst($key) . ': ' . ucfirst($value))
             ->join(', ');
     }
