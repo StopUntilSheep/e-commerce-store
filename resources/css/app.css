@@ -1,4 +1,4 @@
-@import 'resources/css/scss/reviews.scss';
+@import './scss/reviews.scss';
 
 @tailwind base;
 @tailwind components;

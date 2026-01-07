@@ -14,6 +14,15 @@ export default function ProductGrid({ auth, title, products }) {
                     const hasVariants = product.variants?.length;
                     return (
                         <div className="flex flex-col gap-2" key={product.id}>
+                            {/* <pre
+                                style={{
+                                    whiteSpace: "pre-wrap",
+                                    wordBreak: "break-word",
+                                    overflowX: "auto",
+                                }}
+                            >
+                                {JSON.stringify(product)}
+                            </pre> */}
                             <div>
                                 <img
                                     src={
@@ -42,21 +51,16 @@ export default function ProductGrid({ auth, title, products }) {
                                     {product.formatted_price}
                                 </span>
                             </div>
-                            <div className="flex-1">{hasVariants ? product.variants[0].name : null}</div>
+                            <div className="flex-1">
+                                {hasVariants ? product.variants[0].name : null}
+                            </div>
                             <div className="text-sm">
                                 <p>Category: {product.category}</p>
                                 <p>Brand: {product.brand}</p>
                             </div>
                             {/* {auth.user && ( */}
                             <div>
-                                <AddToBasketButton
-                                    productId={product.id}
-                                    productVariantId={
-                                        hasVariants
-                                            ? product.variants[0].id
-                                            : null
-                                    }
-                                />
+                                <AddToBasketButton product={product} />
                             </div>
                             {/* )} */}
                         </div>

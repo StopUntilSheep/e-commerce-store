@@ -36,6 +36,10 @@ class Product extends Model
         'is_featured' => 'boolean',
     ];
 
+    protected $appends = [
+        'cart_quantity'
+    ];
+
     // Relationships
     public function category(): BelongsTo
     {
@@ -60,6 +64,11 @@ class Product extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
     }
 
     public function orders(): BelongsToMany
@@ -94,6 +103,23 @@ class Product extends Model
     public function getIsInStockAttribute(): bool
     {
         return $this->quantity > 0;
+    }
+
+    public function cartQuantityForUser($productId, ?int $userId, ?int $variantId = null): int
+    {
+        if (!$userId) {
+            return 0;
+        }
+        
+        $query = $this->carts()
+            ->where('user_id', $userId)
+            ->where('product_id', $productId);
+            
+        if ($variantId) {
+            $query->where('product_variant_id', $variantId);
+        }
+        
+        return $query->sum('quantity');
     }
 
     public function getMainImageAttribute()

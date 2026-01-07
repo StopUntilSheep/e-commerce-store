@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use Illuminate\Support\Facades\Auth;
 
 class ProductService
 {
@@ -66,6 +67,7 @@ class ProductService
             'formatted_price' => '£' . number_format($product->price, 2),
             'short_description' => $product->short_description,
             'is_in_stock' => $product->quantity > 0,
+            'cart_quantity' => $product->cartQuantityForUser($product->id, Auth::id()),
             'category' => $product->category?->name,
             'brand' => $product->brand?->name,
             'main_image' => $product->images->first()?->url,
